@@ -39,7 +39,6 @@ export class SIWEController {
     ): Observable<{
         success: boolean,
     }> {
-        console.log(verifySignatureDto);
         this.logger.debug(`= GET /siwe/verify - Verifying message ${JSON.stringify(verifySignatureDto)}`);
 
         return this.siweService

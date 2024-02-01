@@ -22,7 +22,6 @@ async function bootstrap() {
             logger.log(`Auth HTTP Service running on ${hostname}:${restPort}`);
         }
         const enableTCP = configService.get('application.tcp.enable');
-        console.log(enableTCP);
         if (enableTCP) {
             const servicePort = configService.get('application.tcp.port');
             const hostname = configService.get('application.tcp.host');

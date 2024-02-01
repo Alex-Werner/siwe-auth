@@ -14,7 +14,6 @@ async function bootstrap() {
 
     try {
         const enableREST = configService.get('application.http.enable');
-        console.log(enableREST);
         if (enableREST) {
             const restPort = configService.get('application.http.port');
             const hostname = configService.get('application.http.host');
@@ -23,7 +22,6 @@ async function bootstrap() {
             logger.log(`SIWE HTTP Service running on ${hostname}:${restPort}`);
         }
         const enableTCP = configService.get('application.tpc.enable');
-        console.log(enableTCP);
         if (enableTCP) {
             const servicePort = configService.get('application.tpc.port');
             const hostname = configService.get('application.tpc.host');

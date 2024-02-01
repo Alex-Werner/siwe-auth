@@ -114,7 +114,6 @@ export class AuthService {
             return await this.userRepository.save(userProps, options);
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') {
-                console.log(props, e);
                 throw new RpcException(new BadRequestException('User or address already exists'));
             }
             throw new RpcException(e);

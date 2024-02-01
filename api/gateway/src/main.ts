@@ -14,15 +14,12 @@ async function bootstrap() {
 
     const hostname = configService.get('application.http.host');
     const enableCorsOrigins = configService.get('application.http.cors.origin');
-    console.log(enableCorsOrigins);
     app.enableCors({
         origin: "http://localhost:3000",
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         credentials: true,
     });
 
-    console.log(configService.get<string>('application.services.siwe.host'));
-    console.log(configService.get<string>('application.services.siwe.port'));
     await app.listen(port, hostname);
     logger.log(`Gateway Server running on http://${hostname}:${port}`);
 }
