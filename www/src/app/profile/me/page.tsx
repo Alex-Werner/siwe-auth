@@ -1,15 +1,16 @@
 'use client';
 import { useContext } from "react";
 import ProfileContext from "@/context/ProfileContext";
+import Cookies from "js-cookie";
 
 const ProfileMePage = () => {
 
     const { username, address, id, role,fetchAndSetProfile } =  useContext(ProfileContext);
 
-
     const onRefreshProfileClick = async () => {
         try {
-            await fetchAndSetProfile();
+            const accessToken = Cookies.get('access_token');
+            await fetchAndSetProfile(accessToken);
         } catch (err) {
             console.error(err);
         }

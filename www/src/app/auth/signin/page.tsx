@@ -4,7 +4,7 @@ import AuthContext from "@/context/AuthContext";
 import Web3Context from "@/context/Web3Context";
 import ProfileContext from "@/context/ProfileContext";
 import api from "@/lib/http";
-import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 const AuthSignInPage = () => {
@@ -15,6 +15,7 @@ const AuthSignInPage = () => {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [formUsername, setFormUsername] = useState('');
+    const router = useRouter();
 
     const handleSignIn = async () => {
         if (!wallet?.address) {
@@ -37,11 +38,14 @@ const AuthSignInPage = () => {
             });
 
             if (response.data.success) {
+                setIsLoading(false)
+                const accessToken = response.data.accessToken;
+                setAccessToken(accessToken);
+                // Cookies.set('access_token', response.data.accessToken, {expires: 1 / 24});
                 setIsAuthenticated(true);
-                setAccessToken(response.data.accessToken);
-                Cookies.set('access_token', response.data.accessToken, {expires: 1 / 24});
-                fetchAndSetProfile();
-                window.location.href = "/profile/me";
+                await fetchAndSetProfile(accessToken);
+                await router.push('/profile/me')
+
             } else {
                 setError('Sign-in failed: ' + response.data.message);
             }
@@ -90,9 +94,8 @@ const AuthSignInPage = () => {
                         <button
                             className={`w-full px-4 py-2 font-bold text-black bg-indigo-600 rounded hover:bg-indigo-500 ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                             onClick={handleSignIn}
-                            disabled={isLoading}
                         >
-                            {isLoading ? 'Loading...' : 'Sign In'}
+                           Sign In
                         </button>
                         <button
                             className="w-full px-4 py-2 font-bold text-black bg-red-600 rounded hover:bg-red-500"

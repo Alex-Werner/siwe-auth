@@ -3,8 +3,11 @@ import {useContext, useState} from "react";
 import AuthContext from "@/context/AuthContext";
 import Web3Context from "@/context/Web3Context";
 import api from "@/lib/http";
+import {useRouter} from "next/navigation";
 
 const AuthSignUpPage = () => {
+    const router = useRouter();
+
     const {createSiweMessage, setIsAuthenticated} = useContext(AuthContext);
     const {connect, clearWeb3Context, wallet, signMessage} = useContext(Web3Context);
     const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +25,6 @@ const AuthSignUpPage = () => {
             const response = await api.post('/siwe/verify', {
                 message, signature, address: wallet?.address, username: formUsername,
             });
-            console.log(response);
             return response.data;
         } catch (err) {
             setError('Error verifying Siwe message');
@@ -55,7 +57,7 @@ const AuthSignUpPage = () => {
                 if (result.id) {
                     setSuccess('Signup successful');
                     setIsAuthenticated(true);
-                    window.location.href = "/profile/me";
+                    router.push("/profile/me");
                 } else {
                     setError('Signup failed' + result.message);
                 }

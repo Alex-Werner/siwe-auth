@@ -1,6 +1,6 @@
 import api from "@/lib/http";
 
-const fetchProfile = async (id: string) => {
+const fetchProfileById = async (id: string) => {
     if(!id) {
         throw new Error('Profile ID is required for fetching profile');
     }
@@ -8,4 +8,4 @@ const fetchProfile = async (id: string) => {
     return response.data;
 }
 
-export default fetchProfile;
+export default fetchProfileById;

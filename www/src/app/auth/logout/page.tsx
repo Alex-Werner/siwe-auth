@@ -4,6 +4,8 @@ import Web3Context from "@/context/Web3Context";
 import AuthContext from "@/context/AuthContext";
 import Cookies from "js-cookie";
 import ProfileContext from "@/context/ProfileContext";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 const AuthLogoutPage = () => {
 
@@ -11,12 +13,14 @@ const AuthLogoutPage = () => {
     const {clearAuthContext} = useContext(AuthContext);
     const {clearProfile} = useContext(ProfileContext);
 
+    const router = useRouter();
+
     function onLogOutButtonClick() {
         clearWeb3Context();
         clearProfile();
         clearAuthContext();
         // Redirect to home page
-        window.location.href = "/";
+        router.push('/');
     }
 
     return (

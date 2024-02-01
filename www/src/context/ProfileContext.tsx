@@ -15,7 +15,7 @@ export interface ProfileContextInterface {
     setProfile: (profile: any) => void;
     clearProfile: () => void;
     fetchSelfProfile: (accessToken: string) => Promise<Profile | null>;
-    fetchAndSetProfile: () => void;
+    fetchAndSetProfile: (accessToken?: string) => Promise<void>;
 }
 
 const ProfileContext = createContext<ProfileContextInterface>({
@@ -28,8 +28,7 @@ const ProfileContext = createContext<ProfileContextInterface>({
     fetchSelfProfile: async (accessToken: string) => {
         return null;
     },
-    fetchAndSetProfile: () => {}
-
+    fetchAndSetProfile: async (accessToken?: string) => {},
 });
 
 export default ProfileContext;

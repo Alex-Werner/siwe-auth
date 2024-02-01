@@ -37,8 +37,6 @@ const NavigationHeader: React.FC<NavigationHeaderProps> = ({  }) => {
     ]
 
     const { isAuthenticated } = useContext(AuthContext)
-
-    console.log({isAuthenticated})
     const navigation =  isAuthenticated ? authenticatedNavigation : guestNavigation;
     return (
         <header className="flex justify-between items-center sticky top-0">

@@ -6,6 +6,7 @@ import AuthContext from "@/context/AuthContext";
 
 export function ProfileProvider({children}: { children: React.ReactNode }) {
     const loadProfileFromStorage = () => {
+        if(typeof window === 'undefined') return null;
         const storedProfile = localStorage.getItem('profile');
         return storedProfile ? JSON.parse(storedProfile) : null;
     };
@@ -22,10 +23,10 @@ export function ProfileProvider({children}: { children: React.ReactNode }) {
 
     const { accessToken } = useContext(AuthContext);
 
-    function fetchAndSetProfile() {
-        fetchSelfProfile(accessToken).then((profile) => {
-            setProfile(profile);
-        });
+    async function fetchAndSetProfile(accessToken?: string) {
+        if(!accessToken) return;
+        const profile = await fetchSelfProfile(accessToken)
+        setProfile(profile);
     }
 
     function clearProfile() {

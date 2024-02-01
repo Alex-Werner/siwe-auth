@@ -16,7 +16,6 @@ const api = axios.create({
 // include access token in request headers
 api.interceptors.request.use(async (config) => {
     const accessToken = Cookies.get('access_token');
-    console.log('get access token', accessToken);
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -27,21 +26,16 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
-        console.log('error', error);
         if (error.response && error.response.status === 401 && !error.config._isRetry) {
             error.config._isRetry = true;
             try {
-                console.log('Refreshing access token...');
-                console.log(Cookies.get('refresh_token'))
                 const response = await refreshAccessToken();
-                console.log({ response })
                 // get cookies from response
                 const cookies = response.headers['set-cookie'];
 
                 if (response.data && response.data.success && response.data.accessToken) {
                     Cookies.remove('access_token');
                     Cookies.set('access_token', response.data.accessToken);
-                    console.log('has set new',Cookies.get('access_token'));
                     return api.request(error.config);
                 }
             } catch (e) {

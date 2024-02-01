@@ -27,7 +27,6 @@ export function Web3Provider({children}: { children: React.ReactNode }) {
 
     async function connect() {
         const provider = getProvider();
-        console.log(provider.request);
         const accounts = await provider.request({ method: 'eth_requestAccounts' });
         const [account, ...secondaryAccounts] = accounts;
         const chainId = await provider.request({ method: 'eth_chainId' });
