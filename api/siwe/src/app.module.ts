@@ -20,19 +20,6 @@ import {SiweModule} from "./siwe/siwe.module";
                 'application.http.port': Joi.number().default(8861),
             }),
         }),
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: async (configService: ConfigService) => ({
-                type: 'sqlite',
-                database: configService.get('application.database.name'),
-                entities: [
-                    __dirname + '/**/*.entity{.ts,.js}',
-                    __dirname + '/**/*.model{.ts,.js}'
-                ],
-                synchronize: true,
-            }),
-        }),
         SiweModule,
     ],
 })

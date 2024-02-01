@@ -1,47 +1,46 @@
 import {NestApplication, NestFactory} from '@nestjs/core';
-import {AppModule} from './app.module';
-import {ConfigService} from "@nestjs/config";
-import { Logger, Injectable } from '@nestjs/common';
 import {Transport} from "@nestjs/microservices";
+import {ConfigService} from "@nestjs/config";
+import {Logger} from '@nestjs/common';
+
+import {AppModule} from './app.module';
 
 async function bootstrap() {
     const logger = new Logger('bootstrap');
-    logger.log('Starting Siwe Service...');
+    logger.log('Starting SIWE Service...');
 
     const app: NestApplication = await NestFactory.create(AppModule);
     const configService = app.get(ConfigService);
 
-    /* HTTP */
-    const enableREST = configService.get('application.http.enable');
-    if(enableREST) {
-        const restPort = configService.get('application.http.port');
-        try {
-            await app.listen(restPort)
-            logger.log(`Siwe HTTP Service running on localhost:${restPort}`);
-        } catch (e) {
-            logger.error(`Failed to start server: ${e}`);
-            process.exit(1);
-        }
-    }
+    try {
+        const enableREST = configService.get('application.http.enable');
+        console.log(enableREST);
+        if (enableREST) {
+            const restPort = configService.get('application.http.port');
+            const hostname = configService.get('application.http.host');
 
-    /* TCP */
-    const enableTCP = configService.get('application.tpc.enable');
-    if(enableTCP) {
-        const servicePort = configService.get('application.tpc.port');
-        try {
+            await app.listen(restPort, hostname);
+            logger.log(`SIWE HTTP Service running on ${hostname}:${restPort}`);
+        }
+        const enableTCP = configService.get('application.tpc.enable');
+        console.log(enableTCP);
+        if (enableTCP) {
+            const servicePort = configService.get('application.tpc.port');
+            const hostname = configService.get('application.tpc.host');
+
             app.connectMicroservice({
                 transport: Transport.TCP,
                 options: {
                     port: parseInt(servicePort),
+                    host: hostname,
                 }
             })
-
             await app.startAllMicroservices();
-            logger.log(`Siwe TCP Service running on localhost:${servicePort}`);
-        } catch (e) {
-            logger.error(`Failed to start server: ${e}`);
-            process.exit(1);
+            logger.log(`SIWE TCP Service running on ${hostname}:${servicePort}`);
         }
+    } catch (e){
+        logger.error(`Failed to start server: ${e}`);
+        process.exit(1);
     }
 }
 

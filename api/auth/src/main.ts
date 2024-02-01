@@ -16,20 +16,26 @@ async function bootstrap() {
         const enableREST = configService.get('application.http.enable');
         if (enableREST) {
             const restPort = configService.get('application.http.port');
-            await app.listen(restPort);
-            logger.log(`Auth HTTP Service running on localhost:${restPort}`);
+            const hostname = configService.get('application.http.host');
+
+            await app.listen(restPort, hostname);
+            logger.log(`Auth HTTP Service running on ${hostname}:${restPort}`);
         }
         const enableTCP = configService.get('application.tcp.enable');
+        console.log(enableTCP);
         if (enableTCP) {
             const servicePort = configService.get('application.tcp.port');
+            const hostname = configService.get('application.tcp.host');
+
             app.connectMicroservice({
                 transport: Transport.TCP,
                 options: {
                     port: parseInt(servicePort),
+                    host: hostname,
                 }
             })
             await app.startAllMicroservices();
-            logger.log(`Auth TCP Service running on localhost:${servicePort}`);
+            logger.log(`Auth TCP Service running on ${hostname}:${servicePort}`);
         }
     } catch (e){
         logger.error(`Failed to start server: ${e}`);

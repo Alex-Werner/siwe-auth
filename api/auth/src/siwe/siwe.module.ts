@@ -1,18 +1,26 @@
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import {ClientsModule, Transport} from '@nestjs/microservices';
 import {SIWE_SERVICE_NAME} from "../../CONSTANTS";
 import {SiweController} from "./siwe.controller";
-import {ConfigModule} from "@nestjs/config";
-import { SiweService } from './siwe.service';
-import { Module } from '@nestjs/common';
+import {ConfigModule, ConfigService} from "@nestjs/config";
+import {SiweService} from './siwe.service';
+import {Module} from '@nestjs/common';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
-        ClientsModule.register([
+        ConfigModule.forRoot({
+            isGlobal: true,
+        }),
+        ClientsModule.registerAsync([
             {
                 name: SIWE_SERVICE_NAME,
-                transport: Transport.TCP,
-                options: { port: 8860 },
+                useFactory: async (configService: ConfigService) => ({
+                    transport: Transport.TCP,
+                    options: {
+                        host: configService.get<string>('application.services.siwe.host'),
+                        port: configService.get<number>('application.services.siwe.port'),
+                    },
+                }),
+                inject: [ConfigService],
             },
         ]),
     ],
@@ -20,4 +28,5 @@ import { Module } from '@nestjs/common';
     providers: [SiweService],
     exports: [SiweService],
 })
-export class SiweModule {}
+export class SiweModule {
+}
