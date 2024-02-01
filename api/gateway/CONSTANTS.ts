@@ -1,0 +1,2 @@
+export const AUTH_SERVICE_NAME = 'AUTH_SERVICE';
+export const SIWE_SERVICE_NAME = 'SIWE_SERVICE_NAME';
