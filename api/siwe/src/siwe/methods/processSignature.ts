@@ -18,7 +18,7 @@ export function processSignature(verifySignatureDto: VerifySignatureDto, shouldD
             throw new RpcException(new BadRequestException('Nonce expired. Please request a new nonce'));
         }
 
-        if (verifySignatureDto.address.toLowerCase() !== message.address.toLowerCase()) {
+        if (verifySignatureDto?.address?.toLowerCase() !== message.address?.toLowerCase()) {
             throw new RpcException(new BadRequestException(`Address does not match: ${verifySignatureDto.address} !== ${message.address}`));
         }
 

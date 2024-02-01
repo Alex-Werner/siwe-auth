@@ -6,8 +6,6 @@ import {User} from "./entities/user.entity";
 import {Users} from "./models/users.model";
 import {JwtService} from "@nestjs/jwt";
 import {Response} from "express";
-import {SiweMessage} from "siwe";
-import {SIWE_SERVICE_NAME} from "../../CONSTANTS";
 import {catchError, from, map, Observable} from "rxjs";
 
 interface SigninProps {
@@ -102,16 +100,21 @@ export class AuthService {
         );
     }
     async signup(props: SignupProps, options?: SaveOptions): Promise<User> {
-        let user = new User({
-            ...props,
+        const userProps = {
+            username: '',
+            address: '',
             role: 'guest',
             createdAt: new Date(),
             updatedAt: new Date()
-        })
+        }
+        if(props?.username) userProps.username = props.username;
+        if(props?.address) userProps.address = props.address;
+
         try {
-            return await this.userRepository.save(user, options);
+            return await this.userRepository.save(userProps, options);
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') {
+                console.log(props, e);
                 throw new RpcException(new BadRequestException('User or address already exists'));
             }
             throw new RpcException(e);

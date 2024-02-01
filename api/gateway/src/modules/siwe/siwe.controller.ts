@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, HttpStatus, Logger, Post} from "@nestjs/common";
+import {Body, Controller, Get, HttpException, HttpStatus, Logger, Post} from "@nestjs/common";
 import {SiweService} from "./siwe.service";
 import {catchError, throwError, Observable} from "rxjs";
 import {ConfigService} from "@nestjs/config";
@@ -35,10 +35,11 @@ export class SIWEController {
 
     @Post('/verify')
     verifyNonce(
-        verifySignatureDto: VerifySignatureDto,
+        @Body() verifySignatureDto: VerifySignatureDto,
     ): Observable<{
         success: boolean,
     }> {
+        console.log(verifySignatureDto);
         this.logger.debug(`= GET /siwe/verify - Verifying message ${JSON.stringify(verifySignatureDto)}`);
 
         return this.siweService

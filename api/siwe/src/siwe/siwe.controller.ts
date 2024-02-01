@@ -63,7 +63,7 @@ export class SIWEController {
     verifyNonce(
         @Body() verifySignatureDto: VerifySignatureDto,
     ): Observable<any> {
-        this.logger.debug(`GET /siwe/verify - Verifying message / nonce`);
+        this.logger.debug(`POST /siwe/verify - Verifying message / nonce`, verifySignatureDto);
         return this.siweService
             .verifySignature(verifySignatureDto)
             .pipe(catchError(sendError));

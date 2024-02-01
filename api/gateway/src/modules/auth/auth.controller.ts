@@ -39,7 +39,10 @@ export class AuthController {
         @Body() body: ProfileDto,
         @Req() req: Request
     ): Observable<any> {
-        const userId = body?.user?.id;
+        const userId = req.user['sub'];
+        if(!userId) {
+            return throwError(() => new HttpException('User not found', HttpStatus.NOT_FOUND));
+        }
         this.logger.debug(`GET /user/profile - Profile request from ${userId}`);
         return this.authService
             .getProfile(userId)
