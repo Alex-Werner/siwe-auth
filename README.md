@@ -5,6 +5,9 @@
 This project is a boilerplate that set up a full-stack service providing sign in with ethereum (SIWE) protocol functionality. 
 It uses NestJS with microservices to process the requests on the backend and NextJS on the front-end.
 
+
+<img width="1065" alt="image" src="https://github.com/Alex-Werner/siwe-auth/assets/5849920/a77f3ff6-9fc0-41e0-a9c1-c6816d67fe22">
+
 ## Stack :
 ### API: 
 
