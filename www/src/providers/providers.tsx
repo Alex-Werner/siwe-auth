@@ -1,15 +1,15 @@
 import AuthProvider from "@/providers/AuthProvider/AuthProvider";
 import Web3Provider from "@/providers/Web3Provider/Web3Provider";
+import ProfileProvider from "@/providers/ProfileProvider/ProfileProvider";
 
 export function Providers({children}: { children: React.ReactNode }) {
     return (
-        <>
-            <Web3Provider>
-                <AuthProvider>
+        <Web3Provider>
+            <AuthProvider>
+                <ProfileProvider>
                     {children}
-                </AuthProvider>
-            </Web3Provider>
-        </>
-
+                </ProfileProvider>
+            </AuthProvider>
+        </Web3Provider>
     )
 }
