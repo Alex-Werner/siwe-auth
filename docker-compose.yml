@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  api_gateway:
+      build: ./api/gateway
+      environment:
+        - NODE_ENV=production
+        - application.services.auth.host=api_auth
+        - application.services.siwe.host=api_siwe
+        - application.http.host=api_gateway
+      volumes:
+        - ./api/gateway:/usr/src/app
+      restart: on-failure
+      networks:
+        - internal_network
+      ports:
+        - "8850:8850"
+        - "8880:8880"
+  api_auth:
+    build: ./api/auth
+    environment:
+      - NODE_ENV=production
+      - application.http.host=api_auth
+      - application.tcp.host=api_auth
+      - application.services.siwe.host=api_siwe
+    volumes:
+      - ./api/auth:/usr/src/app
+    restart: on-failure
+    networks:
+      - internal_network
+    expose:
+      - "8850"
+      - "8851"
+  api_siwe:
+    build: ./api/siwe
+    environment:
+      - NODE_ENV=production
+      - application.tpc.host=api_siwe
+      - application.http.host=api_siwe
+    volumes:
+      - ./api/siwe:/usr/src/app
+    restart: on-failure
+    networks:
+      - internal_network
+    expose:
+      - "8860"
+      - "8861"
+
+networks:
+  internal_network:
+    driver: bridge
